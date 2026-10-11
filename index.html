@@ -1,636 +1,495 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reel Stand Maintenance Schedule</title>
 
-    <meta charset="UTF-8">
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f1f5f9;
+        color: #1e293b;
+    }
 
-    <title>TBO 1 PM Record</title>
+    .container {
+        max-width: 1500px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
 
-    <style>
+    .header {
+        text-align: center;
+        background: #123b64;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    .header h1 {
+        margin: 0 0 8px;
+        font-size: 25px;
+    }
 
+    .header p {
+        margin: 5px 0;
+    }
+
+    .machine-info {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .machine-info label {
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .machine-info input {
+        width: 100%;
+        padding: 9px;
+        border: 1px solid #cbd5e1;
+        border-radius: 5px;
+        margin-top: 6px;
+    }
+
+    .section-title {
+        background: #167d70;
+        color: white;
+        padding: 12px;
+        margin-top: 25px;
+        border-radius: 5px;
+        font-size: 18px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        min-width: 850px;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
+
+    th, td {
+        border: 1px solid #cbd5e1;
+        padding: 10px;
+        text-align: left;
+        vertical-align: top;
+        font-size: 13px;
+    }
+
+    th {
+        background: #dce9f5;
+        color: #123b64;
+        text-align: center;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #f8fafc;
+    }
+
+    td.interval {
+        font-weight: bold;
+        color: #145b53;
+        min-width: 150px;
+    }
+
+    td.work {
+        min-width: 330px;
+    }
+
+    td.date-cell {
+        min-width: 155px;
+    }
+
+    td.date-cell input {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+    }
+
+    td.remarks input {
+        width: 100%;
+        min-width: 130px;
+        padding: 6px;
+        border: 1px solid #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+
+    button {
+        padding: 11px 18px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+    }
+
+    .print-btn {
+        background: #167d70;
+    }
+
+    .reset-btn {
+        background: #64748b;
+    }
+
+    .add-btn {
+        background: #2563eb;
+    }
+
+    .footer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .footer div {
+        border-top: 1px solid #64748b;
+        padding-top: 8px;
+        font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
         body {
-            margin: 0;
-            padding: 30px 15px;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #eef2f7;
-            color: #333;
+            margin: 5px;
         }
 
         .container {
-            width: 100%;
-            max-width: 750px;
-            margin: auto;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 35px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.10);
+            padding: 12px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            margin: 0;
-            color: #005baa;
-            font-size: 32px;
-        }
-
-        .header h2 {
-            margin: 8px 0 20px;
-            font-size: 18px;
-            font-weight: normal;
-            color: #666;
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .required {
-            color: #e00000;
-        }
-
-        select,
-        input[type="date"],
-        textarea {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #cbd2d9;
-            border-radius: 7px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            background: #fff;
-            transition: 0.2s;
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        select:focus,
-        input[type="date"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #005baa;
-            box-shadow: 0 0 0 3px rgba(0, 91, 170, 0.10);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 7px;
-            background: #005baa;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .submit-btn:hover {
-            background: #00447f;
-        }
-
-        .submit-btn:disabled {
-            background: #8baac5;
-            cursor: not-allowed;
-        }
-
-        .success-message {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #d4edda;
-            border: 1px solid #b7dfc1;
-            border-radius: 7px;
-            color: #155724;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .error-message {
-            display: none;
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8d7da;
-            border: 1px solid #f1bfc3;
-            border-radius: 7px;
-            color: #721c24;
-            text-align: center;
-            font-weight: bold;
-        }
-
+        .machine-info,
         .footer {
-            text-align: center;
-            margin-top: 25px;
-            color: #888;
-            font-size: 12px;
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media print {
+        @page {
+            size: landscape;
+            margin: 10mm;
         }
 
-        @media (max-width: 600px) {
-
-            body {
-                padding: 15px 10px;
-            }
-
-            .container {
-                padding: 22px;
-            }
-
-            .header h1 {
-                font-size: 25px;
-            }
-
-            .header h2 {
-                font-size: 16px;
-            }
+        body {
+            background: white;
+            margin: 0;
         }
 
-    </style>
+        .container {
+            box-shadow: none;
+            padding: 0;
+            max-width: none;
+        }
 
+        .buttons {
+            display: none;
+        }
+
+        .header, .section-title, th {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .table-wrap {
+            overflow: visible;
+        }
+
+        table {
+            min-width: 0;
+            font-size: 10px;
+        }
+
+        th, td {
+            padding: 5px;
+            font-size: 10px;
+        }
+
+        input {
+            border: none !important;
+            background: transparent !important;
+        }
+
+        tr {
+            break-inside: avoid;
+        }
+    }
+</style>
 </head>
 
-<a href="https://etachali2-prog.github.io/Annual-Plan/">Back</a>
 <body>
-
 <div class="container">
 
     <div class="header">
-
-        <h1>TBO1</h1>
-
-        <h2>Preventive Maintenance Record</h2>
-
+        <h1>MELBA PRINTING PUBLISHING & PACKAGING S.C.</h1>
+        <p>Electrical & Mechanical Technical Department</p>
+        <h2>PREVENTIVE MAINTENANCE SCHEDULE</h2>
+        <p>Reel Stand / Loading System / Rotary Web Offset Press</p>
     </div>
 
-
-    <form id="pmForm">
-
-
-        <!-- TBO 1 -->
-
-        <div class="form-group">
-
-            <label for="pmMode">
-                Machine Name
-                <span class="required">*</span>
-            </label>
-
-            <select
-                id="pmMode"
-                name="pmMode"
-                required
-            >
-
-                <!---<option value="">-- Select Machine --</option>---->
-
-                <option value="TBO 1">
-                    TBO 1
-                </option>
-
-              <!----<option value="OFFLINE">-->
-                  <!----->  TBO 1---->
-               <!---- </option>--->
-
-            </select>
-
+    <div class="machine-info">
+        <div>
+            <label>Machine Name</label>
+            <input type="text" value="Reel Stand / Loading System">
         </div>
-
-
-        <!-- DATE OF PM -->
-
-        <div class="form-group">
-
-            <label for="pmDate">
-                Date of PM Undertaken
-                <span class="required">*</span>
-            </label>
-
-            <input
-                type="date"
-                id="pmDate"
-                name="pmDate"
-                required
-            >
-
+        <div>
+            <label>Machine ID</label>
+            <input type="text" placeholder="Enter machine ID">
         </div>
-
-
-        <!-- ACTIVITIES -->
-
-        <div class="form-group">
-
-            <label for="activities">
-                Activities Done
-                <span class="required">*</span>
-            </label>
-
-            <textarea
-                id="activities"
-                name="activities"
-                placeholder="Describe the maintenance activities performed..."
-                required
-            ></textarea>
-
+        <div>
+            <label>Year</label>
+            <input type="text" placeholder="Enter maintenance year">
         </div>
-
-
-        <!-- MATERIALS -->
-
-        <div class="form-group">
-
-            <label for="materials">
-                Material Used
-                <span class="required">*</span>
-            </label>
-
-            <textarea
-                id="materials"
-                name="materials"
-                placeholder="Enter materials used..."
-                required
-            ></textarea>
-
+        <div>
+            <label>Responsible Technician</label>
+            <input type="text" placeholder="Technician name">
         </div>
-
-
-        <!-- SPARE PARTS -->
-
-        <div class="form-group">
-
-            <label for="spares">
-                Spare Part Used
-            </label>
-
-            <textarea
-                id="spares"
-                name="spares"
-                placeholder="Enter spare parts used or replaced..."
-            ></textarea>
-
+        <div>
+            <label>Department</label>
+            <input type="text" value="Technical Maintenance">
         </div>
-
-
-        <!-- NEXT PM -->
-
-        <div class="form-group">
-
-            <label for="nextPM">
-                Next PM Scheduled
-                <span class="required">*</span>
-            </label>
-
-            <input
-                type="date"
-                id="nextPM"
-                name="nextPM"
-                required
-            >
-
+        <div>
+            <label>Supervisor</label>
+            <input type="text" placeholder="Supervisor name">
         </div>
-
-
-        <!-- SUBMIT -->
-
-        <button
-            type="submit"
-            class="submit-btn"
-            id="submitButton"
-        >
-            Submit PM Record
-        </button>
-
-
-    </form>
-
-
-    <!-- SUCCESS MESSAGE -->
-
-    <div
-        id="successMessage"
-        class="success-message"
-    >
-        ✓ PM record saved successfully to Google Sheets.
     </div>
 
+    <h3 class="section-title">1. REEL STAND - LOADING SYSTEM</h3>
 
-    <!-- ERROR MESSAGE -->
-
-    <div
-        id="errorMessage"
-        class="error-message"
-    >
-        Unable to save the PM record.
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Maintenance Interval</th>
+            <th>Maintenance Work / Activity</th>
+            <th>Date Maintenance Done</th>
+            <th>Technician / Remarks</th>
+        </tr>
+        </thead>
+        <tbody id="loadingTable">
+        <tr><td>1</td><td class="interval">Daily</td><td class="work">Loading system inspection</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>2</td><td class="interval">Daily</td><td class="work">Inspection patrol</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>3</td><td class="interval">Daily</td><td class="work">Reel transfer table inspection</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>4</td><td class="interval">Daily</td><td class="work">Cleaning the ball roller for immobilizing the reel transfer table</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>5</td><td class="interval">Daily</td><td class="work">Cleaning the reel transfer table and rails of the loading system</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>6</td><td class="interval">Monthly</td><td class="work">Reel transfer table inspection</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>7</td><td class="interval">Monthly</td><td class="work">Cleaning the runners on the reel transfer table and the trolley</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>8</td><td class="interval">Monthly</td><td class="work">Cleaning the reel transfer table proximity switch</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>9</td><td class="interval">Annually</td><td class="work">Rotary web offset press: checking protective equipment</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        <tr><td>10</td><td class="interval">Annually</td><td class="work">Checking warning signs</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        </tbody>
+    </table>
     </div>
 
+    <h3 class="section-title">2. REEL SPLICER / INFEED UNIT AND REEL STAND COMPONENTS</h3>
+
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Maintenance Interval</th>
+            <th>Maintenance Work / Activity</th>
+            <th>Date Maintenance Done</th>
+            <th>Technician / Remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>11</td><td class="interval">According to manufacturer instructions</td><td class="work">Reel splicer/infeed unit: checking the drive motors</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>12</td><td class="interval">Weekly</td><td class="work">Autopaster control: checking the laser light barrier</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>13</td><td class="interval">Weekly</td><td class="work">Chucks with lateral adjustment: greasing the sliding surface of the chucks. Lubricant: DIN 51825 - KP2K</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>14</td><td class="interval">Weekly</td><td class="work">Reel splicer/infeed unit: checking the reel splicer</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>15</td><td class="interval">Weekly</td><td class="work">Support axle with bearing: checking the laser light barrier for reel diameter</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>16</td><td class="interval">Weekly</td><td class="work">Greasing the support axle and gear rack. Lubricant: DIN 51825 - KP2K</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>17</td><td class="interval">Weekly</td><td class="work">Cleaning the web guide rollers</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>18</td><td class="interval">Monthly</td><td class="work">Gluing device: checking the gluing device</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>19</td><td class="interval">Monthly</td><td class="work">Web guide roller: checking the web guide rollers</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>20</td><td class="interval">Every 3 months</td><td class="work">Chucks with lateral adjustment: greasing the spline shaft of the drive motor. Lubricant: Fin Assembly Grease</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>21</td><td class="interval">Every 3 months</td><td class="work">Greasing the chuck jaws. Lubricant: DIN 51825 - KP2K</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>22</td><td class="interval">Every 3 months</td><td class="work">Reel brake: checking the brake shoes</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>23</td><td class="interval">Every 3 months</td><td class="work">Reel brake: checking the brake disk</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>24</td><td class="interval">Every 3 months</td><td class="work">Reel splicer pneumatic system: checking the pneumatic system pressure setting</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>25</td><td class="interval">Every 3 months</td><td class="work">Support axle drive: greasing the gear wheels. Lubricant: DIN 51825 - KP2K</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>26</td><td class="interval">Every 6 months</td><td class="work">Chucks with lateral adjustment: checking the V-belts</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>27</td><td class="interval">Every 6 months</td><td class="work">Reel splicer/infeed unit: maintenance inspection</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>28</td><td class="interval">Every 6 months</td><td class="work">Checking the outlet filters</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>29</td><td class="interval">Every 6 months</td><td class="work">Cleaning the air intake area</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>30</td><td class="interval">Every 6 months</td><td class="work">Cleaning the air ducts</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>31</td><td class="interval">Annually</td><td class="work">Rotary web offset press: checking protective equipment</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>32</td><td class="interval">Annually</td><td class="work">Checking warning signs</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>33</td><td class="interval">Every 2 years</td><td class="work">Support axle with bearing: replacing the support arm clamp, conical seat and spherical washer</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3 class="section-title">3. LOADING SYSTEM - RESULTS-BASED MAINTENANCE</h3>
+
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Maintenance Interval</th>
+            <th>Maintenance Work / Activity</th>
+            <th>Date Maintenance Done</th>
+            <th>Technician / Remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>34</td><td class="interval">After every standstill in the dryer</td><td class="work">Webbing-up chain: greasing the chain using Klüberplus SK 11-299 lubricant</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>35</td><td class="interval">After every standstill in the dryer</td><td class="work">Cleaning the webbing-up chain if it is heavily soiled</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3 class="section-title">4. LOADING SYSTEM - CALENDAR-BASED MAINTENANCE</h3>
+
+    <div class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Maintenance Interval</th>
+            <th>Maintenance Work / Activity</th>
+            <th>Date Maintenance Done</th>
+            <th>Technician / Remarks</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>36</td><td class="interval">Weekly</td><td class="work">Maintenance unit: checking the pressure setting for drives in the printing units</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>37</td><td class="interval">Weekly</td><td class="work">Checking the pressure setting for drives in the folder superstructure</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>38</td><td class="interval">Weekly</td><td class="work">Webbing apron: greasing the webbing apron. Lubricant: DIN 51825 - KP2K</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>39</td><td class="interval">Monthly</td><td class="work">WUD pneumatic system: checking pneumatic components for leakage</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>40</td><td class="interval">Every 3 months</td><td class="work">Webbing-up chain: checking the chain</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>41</td><td class="interval">Every 3 months</td><td class="work">Cleaning the webbing-up chain if it is lightly soiled</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>42</td><td class="interval">Every 3 months</td><td class="work">WUD pneumatic system: checking the pressure setting at the compressed-air filter regulator</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>43</td><td class="interval">Every 6 months</td><td class="work">Webbing-up device: cleaning the chain slide rail</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>44</td><td class="interval">Annually</td><td class="work">Rotary web offset press: checking protective equipment</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>45</td><td class="interval">Annually</td><td class="work">Webbing-up device: checking the web paths</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+
+        <tr><td>46</td><td class="interval">Annually</td><td class="work">WUD pneumatic system: checking a pneumatic hose line</td><td class="date-cell"><input type="date"></td><td class="remarks"><input type="text"></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="buttons">
+        <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+        <button class="add-btn" onclick="addRow()">Add Maintenance Activity</button>
+        <button class="reset-btn" onclick="resetDates()">Clear Maintenance Dates</button>
+    </div>
 
     <div class="footer">
-        TBO 1 Preventive Maintenance System
+        <div>Prepared by: ____________________</div>
+        <div>Checked by: ____________________</div>
+        <div>Approved by: ____________________</div>
     </div>
 
 </div>
 
-
 <script>
-
-    // =====================================================
-    // GOOGLE APPS SCRIPT WEB APP URL
-    // =====================================================
-
-    const GOOGLE_SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbwGAclJsq8kJpwfKrb_C9EVp-GPStu_tBeL6JAO8dg_Ly3BoiQo2c1SGeT3XLy_GMSuDg/exec";
-
-
-    // =====================================================
-    // GET FORM ELEMENTS
-    // =====================================================
-
-    const form =
-        document.getElementById("pmForm");
-
-    const pmMode =
-        document.getElementById("pmMode");
-
-    const pmDate =
-        document.getElementById("pmDate");
-
-    const activities =
-        document.getElementById("activities");
-
-    const materials =
-        document.getElementById("materials");
-
-    const spares =
-        document.getElementById("spares");
-
-    const nextPM =
-        document.getElementById("nextPM");
-
-    const submitButton =
-        document.getElementById("submitButton");
-
-    const successMessage =
-        document.getElementById("successMessage");
-
-    const errorMessage =
-        document.getElementById("errorMessage");
-
-
-    // =====================================================
-    // TODAY'S DATE
-    // =====================================================
-
-    const today =
-        new Date().toISOString().split("T")[0];
-
-
-    // PM undertaken cannot be in the future
-    pmDate.max = today;
-
-
-    // Next PM cannot be before today
-    nextPM.min = today;
-
-
-    // =====================================================
-    // WHEN PM DATE CHANGES
-    // =====================================================
-
-    pmDate.addEventListener("change", function () {
-
-        if (pmDate.value) {
-
-            nextPM.min = pmDate.value;
-
-            if (
-                nextPM.value &&
-                nextPM.value < pmDate.value
-            ) {
-
-                nextPM.value = "";
-
-            }
-
-        }
-
-    });
-
-
-    // =====================================================
-    // FORM SUBMISSION
-    // =====================================================
-
-    form.addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-
-            // Hide previous messages
-
-            successMessage.style.display = "none";
-
-            errorMessage.style.display = "none";
-
-
-            // =================================================
-            // VALIDATE DATES
-            // =================================================
-
-            const pmDateValue =
-                new Date(pmDate.value);
-
-            const nextPMValue =
-                new Date(nextPM.value);
-
-
-            if (nextPMValue < pmDateValue) {
-
-                errorMessage.textContent =
-                    "Next PM Scheduled date cannot be before the PM Undertaken date.";
-
-                errorMessage.style.display =
-                    "block";
-
-                return;
-
-            }
-
-
-            // =================================================
-            // PREPARE DATA
-            // =================================================
-
-            const data = {
-
-                pmMode:
-                    pmMode.value,
-
-                pmDate:
-                    pmDate.value,
-
-                activities:
-                    activities.value.trim(),
-
-                materials:
-                    materials.value.trim(),
-
-                spares:
-                    spares.value.trim(),
-
-                nextPM:
-                    nextPM.value
-
-            };
-
-
-            // =================================================
-            // DISABLE SUBMIT BUTTON
-            // =================================================
-
-            submitButton.disabled = true;
-
-            submitButton.textContent =
-                "Saving...";
-
-
-            try {
-
-                // =============================================
-                // SEND DATA TO GOOGLE APPS SCRIPT
-                // =============================================
-
-                const response =
-                    await fetch(
-                        GOOGLE_SCRIPT_URL,
-                        {
-                            method: "POST",
-
-                            body:
-                                JSON.stringify(data)
-                        }
-                    );
-
-
-                // =============================================
-                // READ RESPONSE
-                // =============================================
-
-                const result =
-                    await response.json();
-
-
-                // =============================================
-                // SUCCESS
-                // =============================================
-
-                if (result.success) {
-
-                    successMessage.textContent =
-                        "✓ " +
-                        data.pmMode +
-                        " PM record saved successfully to Google Sheets.";
-
-                    successMessage.style.display =
-                        "block";
-
-
-                    // Reset form
-
-                    form.reset();
-
-
-                    // Restore date limits
-
-                    pmDate.max =
-                        today;
-
-                    nextPM.min =
-                        today;
-
-
-                    // Scroll to success message
-
-                    successMessage.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
-
-                }
-
-
-                // =============================================
-                // ERROR FROM GOOGLE SCRIPT
-                // =============================================
-
-                else {
-
-                    throw new Error(
-                        result.message ||
-                        "Google Sheets returned an error."
-                    );
-
-                }
-
-            }
-
-
-            catch (error) {
-
-                console.error(error);
-
-                errorMessage.textContent =
-                    "❌ Unable to save the record. Please check your Google Apps Script URL and deployment settings.";
-
-                errorMessage.style.display =
-                    "block";
-
-
-                errorMessage.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
-
-            }
-
-
-            finally {
-
-                // Enable button again
-
-                submitButton.disabled =
-                    false;
-
-                submitButton.textContent =
-                    "Submit PM Record";
-
-            }
-
-        }
+function addRow() {
+    const table = document.querySelector(
+        "#loadingTable"
     );
 
+    const number = table.rows.length + 1;
+    const row = table.insertRow();
+
+    row.innerHTML = `
+        <td>${number}</td>
+        <td class="interval">
+            <input type="text"
+                   placeholder="Interval"
+                   style="width:100%;padding:6px">
+        </td>
+        <td class="work">
+            <input type="text"
+                   placeholder="Maintenance activity"
+                   style="width:100%;padding:6px">
+        </td>
+        <td class="date-cell">
+            <input type="date">
+        </td>
+        <td class="remarks">
+            <input type="text" placeholder="Remarks">
+        </td>
+    `;
+
+    row.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function resetDates() {
+    if (confirm("Clear all maintenance dates and remarks?")) {
+        document.querySelectorAll('input[type="date"]').forEach(input => {
+            input.value = "";
+        });
+
+        document.querySelectorAll(
+            'td.remarks input'
+        ).forEach(input => {
+            input.value = "";
+        });
+    }
+}
 </script>
 
 </body>
-
 </html>
+```
